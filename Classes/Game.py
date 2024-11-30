@@ -55,12 +55,6 @@ class Game:
                     parent_board.children.append(child_board)
                     self.board_states.add(board_state)  # Add new state to the set
 
-                    if child_board.heuristic_estimate == 0:
-                        #print("Solution Found!")
-                        self.solution_board = child_board
-                        ##self.print_shortest_path(child_board)
-                        #return 1
-
 
     def print_shortest_path(self):
         path = []
@@ -82,18 +76,18 @@ class Game:
             print()
 
     def find_solution(self):
-        # Initialize by exploring the root board
+        # Initialize -> create root root board
         self.explore_child_boards()
 
         # Continue until all boards are explored or the solution is confirmed optimal
-        while self.list_of_boards:
+        while 1:
 
             self.list_of_boards.sort(key=lambda board: board.overall_cost)
 
             # Process the board with the lowest cost (sorted by f(n))
             current_board = self.list_of_boards.pop(0)  # Remove the board with the smallest f(n)
 
-            # If the current board is the goal, stop and ensure optimality
+            # If the current board is the goal, stop
             if np.array_equal(current_board.array, current_board.goal):
                 self.solution_board = current_board
                 break
