@@ -22,7 +22,7 @@ class Game:
 
         if parent_board is None:
             self.root_board.initBoard(self.width, self.height)
-            self.root_board.printBoard()
+            ##self.root_board.printBoard()
             self.list_of_boards.append(self.root_board)
 
             if self.heuristic_method == "h1":
@@ -54,6 +54,7 @@ class Game:
                 child_board.update_cost()
 
                 board_state = tuple(child_board.array.flatten())
+
                 if board_state not in self.board_states:
                     self.list_of_boards.append(child_board)
                     parent_board.children.append(child_board)
@@ -99,6 +100,19 @@ class Game:
             # Break if the solution is found (handled inside `we_need_to_deeper`)
             if np.array_equal(current_board.array, current_board.goal):
                 break
+
+    def get_number_of_Boards(self):
+        return len(self.board_states)
+
+    def get_complexity_of_solution(self):
+        complexity = 0
+        current_board = self.solution_board
+
+        while current_board is not None:
+            current_board = current_board.parent
+            complexity += 1
+
+        return complexity - 1
 
 
 
