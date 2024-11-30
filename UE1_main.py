@@ -1,31 +1,25 @@
 import numpy as np
+from decorator import append
 
 from Classes.Board import Board
 from Classes.Game import Game
 
-newGame = Game(3,3)
-newGame.we_need_to_deeper()
+gamelist = []
 
-newGame.we_need_to_deeper(newGame.list_of_boards[0])
-newGame.we_need_to_deeper(newGame.list_of_boards[0])
+for game in range(3):
+    game = Game("h2")
+    game.find_solution()
+    gamelist.append(game)
 
-while newGame.list_of_boards:
-    # Process the board with the lowest cost
-    current_board = newGame.list_of_boards[0]
-    newGame.we_need_to_deeper(current_board)
+##TODO multithreaded 100 Games
+##TODO console output aks for solved board
 
-    # Break if the solution is found (handled inside `we_need_to_deeper`)
-    if np.array_equal(current_board.array, current_board.goal):
-        break
+gamelist[0].print_shortest_path()
 
 
-#board = Board()
-#board.initBoard(3,3)
-#board.printBoard()
-#print(board.posible_moves())
-# board.h1()
-# board.h2()
-# board2 = Board(board)
-#
-# print(board2.posible_moves())
-# board2.printBoard()
+
+
+
+
+
+

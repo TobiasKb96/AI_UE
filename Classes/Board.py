@@ -7,6 +7,7 @@ class Board:
 
     def __init__(self,parent_board=None):
         if parent_board is None:
+            #initializes all variables
             self.array = None
             self.goal = None
             self.children = []
@@ -14,13 +15,15 @@ class Board:
             self.heuristic_estimate = 0
             self.overall_cost = 0
             self.parent = None
+            self.width = 3
+            self.height = 3
+            self.size = 9
 
 
         else:
-
-            self.width = parent_board.width
-            self.height = parent_board.height
-            self.size = parent_board.size
+            self.width = 3
+            self.height = 3
+            self.size = 9
             self.array = np.copy(parent_board.array)
             self.goal = parent_board.goal
             self.cost = parent_board.cost
@@ -58,16 +61,21 @@ class Board:
             self.height = height
             self.size = width * height
             self.array = np.empty((self.width, self.height), dtype=int)
+
+            ##Create Array as a goal from  0 to  8
             self.goal = np.arange(0, self.size).reshape(width, height)
 
-            allNumbers = list(range(self.size))
+     ##Generate random Board
+            ##create list of numbers 0 to 8
+            allNumbers = list(range(self.size)) ##012345678
 
+            ##shuffles until solvable sequence is found
             while(1):
-                np.random.shuffle(allNumbers)
+                np.random.shuffle(allNumbers) ##018274635
                 if (self.is_solvable(allNumbers)):
                     break
 
-
+            ##fills array with solvable sequence
             k = 0
             for i in range(self.width):
                 for j in range(self.height):
@@ -79,14 +87,14 @@ class Board:
         for row in self.array:
             print(row)
 
-    def  h1(self):
+    ##Hemming heuristic
+    def h1(self):
         differences = np.sum(self.array != self.goal)
         self.heuristic_estimate = differences
 
+    ##Manhatten distance
     def h2(self):
-        # Initialize the Manhattan distance sum
         distance = 0
-
         # Iterate through the board to calculate the distance for each tile
         goal_value = 0
         for i in range(self.width):
@@ -123,8 +131,6 @@ class Board:
 
     def update_cost(self):
         self.overall_cost = self.cost + self.heuristic_estimate
-
-
 
 
 
