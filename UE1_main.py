@@ -5,7 +5,7 @@ from Classes.Game import Game
 nr_of_games = 10
 
 
-def solve_puzzle(instance_id, heuristic_method="h1"):
+def solve_puzzle(instance_id, heuristic_method):
     ## Measure runtime
     start_time = time.time()
     game = Game(heuristic_method)
@@ -47,11 +47,13 @@ def start_games(nr_of_games, heuristic_method):
     return results
 
 
-##### Analyze Results
 def analyze_results(results):
+    ##get_complexity_of_solution - Aufruf
+
+
     complexity_groups = {}
 
-    ## Group by complexity only
+    ## Group by complexity
     for result in results:
         complexity = result["Complexity"]
         if complexity not in complexity_groups:
@@ -75,7 +77,6 @@ def analyze_results(results):
     return averages
 
 
-##### Print Results
 def print_results(results_h1, results_h2):
     ## Extract unique complexities
     complexities = set([r["Complexity"] for r in results_h1] + [r["Complexity"] for r in results_h2])
