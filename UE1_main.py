@@ -1,8 +1,7 @@
 ##TODO multithreaded 100 Games
 ##TODO console output ask for solved board
 ##TODO table with complexity comparisons of different heuristics
-##TODO comment code -> Julian
-##TODO rework documentation ->Julian
+
 import threading
 import time
 from collections import defaultdict

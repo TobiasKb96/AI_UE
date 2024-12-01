@@ -1,9 +1,10 @@
 import numpy as np
 
-#aka Node
+# Managing board states, heuristic calculations, and transitions
 
 class Board:
 
+    # Function: Creates a new board, either as a root or child, copying attributes as needed
     def __init__(self,parent_board=None):
         self.width = 3
         self.height = 3
@@ -32,31 +33,37 @@ class Board:
 
             self.parent = parent_board
 
+    # Output: A board with a random solvable state
+    # Functions:    Generates a random sequence
+    #               Check if this sequence is solvable
     def initBoard(self):
 
-            ##Create Array as a goal from  0 to  8
+            # Create Array as a goal from  0 to  8
             self.goal = np.arange(0, self.size).reshape(self.width, self.height)
 
-     ##Generate random Board
-            ##create list of numbers 0 to 8
+            # Generate random Board
+            # create list of numbers 0 to 8
             allNumbers = list(range(self.size)) ##012345678
 
-            ##shuffles until solvable sequence is found
+            # shuffles until solvable sequence is found
             while(1):
                 np.random.shuffle(allNumbers) ##018274635
                 if (self.is_solvable(allNumbers)):
                     break
 
-            ##Force initial array
+            ##Force initial array for testing
             #allNumbers = [1,2,0,3,4,5,6,7,8,9]
 
-            ##fills array with solvable sequence
+            # fills array with solvable sequence
             k = 0
             for i in range(self.width):
                 for j in range(self.height):
                     self.array[i][j] = allNumbers[k]
                     k += 1
 
+    # Input: A list representing the random generated sequence
+    # Output: Boolean indicating whether the sequence is solvable
+    # Function: Calculates inversions and blank tile position to determine solvability
     def is_solvable(self, sequence):
         # Count inversions
         inversions = 0
@@ -68,11 +75,13 @@ class Board:
         # A 3x3 puzzle is solvable if inversions are even
         return inversions % 2 == 0
 
+    # Function: Displays the board as a 2D Array
     def printBoard(self):
         for row in self.array:
             print(row)
 
-    ##Hamming heuristic
+    # Output: The newly calculated Hamming distance
+    # Function: Calculates the Hamming distance (Counts the number of misplaced tiles)
     def h1(self):
         differences = np.sum(self.array != self.goal)
         if differences > 0:
@@ -80,7 +89,8 @@ class Board:
         self.heuristic_estimate = differences
         #print(self.heuristic_estimate)
 
-    ##Manhatten distance
+    # Output: The newly calculated Manhattan distance
+    # Function: Calculates the Manhattan distance (the sum of distances for all tiles from their goal positions)
     def h2(self):
         # Iterate through the board to calculate the distance for each tile
         distance = 0
@@ -93,6 +103,9 @@ class Board:
         self.heuristic_estimate = distance
         #print(self.heuristic_estimate)
 
+    # Input: Tile which should be exchanged with the empty field
+    # Output: New board with moved tiles
+    # Function: Swaps the positions of 0 and x and increments the move cost
     def switch_x_and_0(self, x):
         pos1 = tuple(np.argwhere(self.array == 0)[0])  # Get position of 0
         pos2 = tuple(np.argwhere(self.array == x)[0])  # Get position of x
@@ -101,6 +114,8 @@ class Board:
         self.array[pos1], self.array[pos2] = self.array[pos2], self.array[pos1]
         self.cost += 1
 
+    # Output: List of tiles that can move into the blank space
+    # Function: Identifies valid moves by checking the position of the blank tile
     def possible_moves(self):
         zero_position = tuple(np.argwhere(self.array == 0)[0])
         row, col = zero_position
@@ -117,6 +132,8 @@ class Board:
 
         return neighbors
 
+    # Output: Overall costs
+    # Function: Adds cost and heuristic_estimate
     def update_cost(self):
         self.overall_cost = self.cost + self.heuristic_estimate
 

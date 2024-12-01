@@ -3,9 +3,11 @@ import numpy as np
 from Classes.Board import Board
 
 
-#aka Tree
+# Managing A* search execution and maintains the solution path
 
 class Game:
+    # Input: A string specifying the heuristic method (h1 for Hamming, h2 for Manhattan)
+    # Output: Initialized Game object
     def __init__(self, heuristic_method):
         self.heuristic_method = heuristic_method
         self.board_states = set()
@@ -13,12 +15,15 @@ class Game:
         self.list_of_boards = []
         self.solution_board : Board = None
 
-
+    # Input: Parent board (if present)
+    # Output: All valid child boards and an updated game state
+    # Function:     Initializes the root board if parent_board is None
+    #               Generate all valid child boards
+    #               Ensures each state is unique
     def explore_child_boards(self, parent_board: Board = None):
 
         if parent_board is None:
             self.root_board.initBoard()
-            ##self.root_board.printBoard()
             self.list_of_boards.append(self.root_board)
 
             if self.heuristic_method == "h1":
@@ -55,7 +60,8 @@ class Game:
                     parent_board.children.append(child_board)
                     self.board_states.add(board_state)  # Add new state to the set
 
-
+    # Output: Prints the sequence of moves from the root board to the solution
+    # Function: Backtracks from the solution board to the root, collecting and printing each step
     def print_shortest_path(self):
         path = []
         current_board = self.solution_board
@@ -75,8 +81,12 @@ class Game:
             board.printBoard()
             print()
 
+    # Output: Determines the optimal solution board
+    # Function: Implements the A* algorithm
+    #           Sorts unexplored boards by their costs
+    #           Stops when the goal state is found
     def find_solution(self):
-        # Initialize -> create root root board
+        # Initialize -> create root board
         self.explore_child_boards()
 
         # Continue until all boards are explored or the solution is confirmed optimal
@@ -95,9 +105,13 @@ class Game:
             # Otherwise, explore child boards
             self.explore_child_boards(current_board)
 
+    # Output: The number of unique board states explored
+    # Function: Returns the size of the board_states set
     def get_number_of_Boards(self):
         return len(self.board_states)
 
+    # Output: The depth of the solution
+    # Function: Counts the number of boards traversed in the shortest solution path
     def get_complexity_of_solution(self):
         complexity = 0
         current_board = self.solution_board
