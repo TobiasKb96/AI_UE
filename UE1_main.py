@@ -20,6 +20,10 @@ from Classes.Game import Game
 
 
 #####Test
+#new_game = Game("h2")
+#new_game.find_solution()
+#new_game.print_shortest_path()
+#print(new_game.get_complexity_of_solution())
 nr_of_games = 100
 
 def solve_puzzle(instance_id, heuristic_method="h1"):
@@ -128,6 +132,9 @@ average_h2 = analyze_results(result_h2)
 print_results(average_h1, average_h2)
 
 print(f"Total puzzles processed: {len(result_h1)} for H1, {len(result_h2)} for H2")
+
+#result = solve_puzzle(2, "h2")
+#print(f"Complexity: {result['Complexity']}")
 
 ##print(average_h1, average_h2)
 

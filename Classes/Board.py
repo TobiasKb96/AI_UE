@@ -49,7 +49,7 @@ class Board:
                     break
 
             ##Force initial array
-            allNumbers = [1,2,0,3,4,5,6,7,8,9]
+            #allNumbers = [1,2,0,3,4,5,6,7,8,9]
 
             ##fills array with solvable sequence
             k = 0
@@ -98,7 +98,7 @@ class Board:
     def h2(self):
         distance = 0
         # Iterate through the board to calculate the distance for each tile
-        goal_value = 1
+        goal_value = 0
         for i in range(self.width):
             for j in range(self.height):
 
