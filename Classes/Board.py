@@ -1,5 +1,5 @@
 import numpy as np
-from networkx.algorithms.operators.binary import difference
+#from networkx.algorithms.operators.binary import difference
 
 #aka Node
 
