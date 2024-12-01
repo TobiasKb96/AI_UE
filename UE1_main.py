@@ -7,6 +7,7 @@ import concurrent
 import threading
 import time
 import concurrent.futures
+from collections import defaultdict
 
 from Classes.Game import Game
 
@@ -34,18 +35,20 @@ def solve_puzzle(instance_id, heuristic_method="h1"):
     solution_complexity = game.get_complexity_of_solution()
 
     return {
-        total_runtime,
-        nr_of_boards,
-        solution_complexity
+        "Runtime": total_runtime,
+        "Number of Boards": nr_of_boards,
+        "Complexity": solution_complexity
     }
 
 def start_games(nr_of_games, heuristic_method):
     results = []
     threads = []
 
+    lock = threading.Lock()
     def solved_thread(instance_id, heuristic_method):
-        result = solve_puzzle(1, heuristic_method)
-        results.append(result)
+        result = solve_puzzle(instance_id, heuristic_method)
+        with lock:                  #ensure only one thread writes to results at a time
+            results.append(result)
 
     ##Threading for each game
     for instance_id in range(1, nr_of_games + 1):
@@ -63,20 +66,21 @@ def start_games(nr_of_games, heuristic_method):
 def analyze_results(results):
     ##If more boards have the same complexity and board nr. they will be added together to get the average runtime
     complexity_sum = 0
+    grouped_results = defaultdict(list)
     for result in results:
-        complexity = result
-        if complexity not in complexity_sum:
-            complexity_sum[complexity] = []
-        complexity_sum[complexity].append(result)
+        complexity = result["Complexity"]
+        grouped_results[complexity].append(result)
 
     ##Calculate average runtime for each complexity
     averages = []
-    for complexity, runtimes in complexity_sum.items():
-        avg_runtime = sum(r["Runtime"] for r in runtimes) / len(runtimes)
-        number_of_games = len(runtimes)
+    for complexity, games in grouped_results.items():
+        avg_runtime = sum(game["Runtime"] for game in games) / len(games)
+        avg_memory = sum(game["Number of Boards"] for game in games) / len(games)
+        number_of_games = len(games)
         averages.append({
             "Complexity": complexity,
             "Average Runtime": avg_runtime,
+            "Average Memory Usage": avg_memory,
             "Number of Games": number_of_games
         })
 
@@ -92,9 +96,25 @@ def print_results(result_h1, result_h2):
     ##Sort complexity levels
     complexities = sorted(complexities)
 
+    # Print header
+    print(f"{'Complexity':<15}{'H1 Avg Runtime':<20}{'H2 Avg Runtime':<20}{'H1 Avg Memory':<20}{'H2 Avg Memory':<20}")
+    print("-" * 95)
+
     ##Create the comparison table
 
     ##Print the table
+    for complexity in complexities:
+        h1_result = next((r for r in result_h1 if r["Complexity"] == complexity), None)
+        h2_result = next((r for r in result_h2 if r["Complexity"] == complexity), None)
+
+        # Extract runtime values, or use "N/A" if not available
+        h1_runtime = f"{h1_result['Average Runtime']:.5f}" if h1_result else "N/A"
+        h2_runtime = f"{h2_result['Average Runtime']:.5f}" if h2_result else "N/A"
+        h1_memory = f"{h1_result['Average Memory Usage']:.2f}" if h1_result else "N/A"
+        h2_memory = f"{h2_result['Average Memory Usage']:.2f}" if h2_result else "N/A"
+
+        print(f"{complexity:<15}{h1_runtime:<20}{h2_runtime:<20}{h1_memory:<20}{h2_memory:<20}")
+
 
 
 ##Start games
@@ -105,7 +125,11 @@ result_h2 = start_games(nr_of_games, "h2")
 average_h1 = analyze_results(result_h1)
 average_h2 = analyze_results(result_h2)
 
-print(average_h1, average_h2)
+print_results(average_h1, average_h2)
+
+print(f"Total puzzles processed: {len(result_h1)} for H1, {len(result_h2)} for H2")
+
+##print(average_h1, average_h2)
 
 
 ##TODO split into different complexities

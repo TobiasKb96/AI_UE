@@ -92,7 +92,7 @@ class Board:
         if differences > 0:
             differences  -= 1
         self.heuristic_estimate = differences
-        print(self.heuristic_estimate)
+        #print(self.heuristic_estimate)
 
     ##Manhatten distance
     def h2(self):
@@ -107,7 +107,7 @@ class Board:
                     goal_value += 1
                     distance += abs((board_coordinates[0]) - i) + abs((board_coordinates[1]) - j)
         self.heuristic_estimate = distance
-        print(self.heuristic_estimate)
+        #print(self.heuristic_estimate)
 
     def switch_x_and_0(self, x):
         pos1 = tuple(np.argwhere(self.array == 0)[0])  # Get position of 0
