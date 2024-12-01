@@ -1,10 +1,11 @@
 import numpy as np
 from networkx.algorithms.operators.binary import difference
 
-#aka Node
+# Managing board states, heuristic calculations, and transitions
 
 class Board:
 
+    # Function: Creates a new board, either as a root or child, copying attributes as needed
     def __init__(self,parent_board=None):
         self.width = 3
         self.height = 3
@@ -33,25 +34,28 @@ class Board:
 
             self.parent = parent_board
 
+    # Output: A board with a random solvable state
+    # Functions:    Generates a random sequence
+    #               Check if this sequence is solvable
     def initBoard(self):
 
-            ##Create Array as a goal from  0 to  8
+            # Create Array as a goal from  0 to  8
             self.goal = np.arange(0, self.size).reshape(self.width, self.height)
 
-     ##Generate random Board
-            ##create list of numbers 0 to 8
+            # Generate random Board
+            # create list of numbers 0 to 8
             allNumbers = list(range(self.size)) ##012345678
 
-            ##shuffles until solvable sequence is found
+            # shuffles until solvable sequence is found
             while(1):
                 np.random.shuffle(allNumbers) ##018274635
                 if (self.is_solvable(allNumbers)):
                     break
 
-            ##Force initial array
+            # Force initial array
             allNumbers = [1,2,0,3,4,5,6,7,8,9]
 
-            ##fills array with solvable sequence
+            # fills array with solvable sequence
             k = 0
             for i in range(self.width):
                 for j in range(self.height):

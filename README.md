@@ -1,9 +1,3 @@
-#TODO 
-
-
-
-
-
 Modules
 
     Board.py: Defines the Board class for managing board states, heuristic calculations, and transitions.
@@ -18,17 +12,19 @@ Board (Board.py)
     Attributes:
         array: Current board configuration.
         goal: Target configuration.
-        heuristic_estimate: Value based on the heuristic method.
         cost: Steps taken to reach the state.
+        heuristic_estimate: Value based on the heuristic method.
         overall_cost: Combined cost (A* function value f(n)).
         children: List of valid child states.
         parent: Pointer to the previous board state.
 
-    Key Methods:
+    Methods:
         initBoard: Initializes a random solvable board.
         is_solvable: Verifies solvability of the board.
+        printBoard: Print the current board.
         h1: Computes Hamming distance.
         h2: Computes Manhattan distance.
+        switch_x_and_0: Move one value to the empty position.
         possible_moves: Identifies tiles that can be swapped with the blank.
         update_cost: Updates the overall cost for the board state.
 
@@ -37,10 +33,11 @@ Game (Game.py)
     Manages the search process for a solution.
 
     Attributes:
+        heuristic_method: Chosen heuristic ("h1" or "h2").
+        board_states: 
         root_board: Starting board state.
         solution_board: Final solved board state.
         list_of_boards: Open list of states for exploration.
-        heuristic_method: Chosen heuristic ("h1" or "h2").
 
     Key Methods:
         explore_child_boards: Expands child states from a parent.
@@ -49,17 +46,17 @@ Game (Game.py)
 
 Fundamental Design Decisions
 
-    Heuristics: The choice of Manhattan and Hamming distance ensures admissibility and optimality.
-
     Data Structures: 
         numpy arrays for efficient board operations.
         Sets to track explored states, avoiding redundancy.
 
     Class Hierarchy:
-        Separation of Board and Game ensures modularity and scalability.
+        Logical division of functionalities into board, game and main.
+            Main is responsible for starting the solution search and for entering the basic conditions (which heuristics, how many fields should be created, ...).
+            Board is responsible for creating new boards based on the distances.
+            Game is responsible for finding the solution and its flow.
 
-    Algorithm Efficiency:
-        Priority queue-like behavior using sorted lists optimizes A* state selection.
+
 
 Discussion and Conclusions
 
@@ -71,9 +68,10 @@ Discussion and Conclusions
         Manhattan is computationally more expensive but reduces total explored states.
 
     Alternatives and Improvements:
-        Implementing a true priority queue using heapq for better efficiency.
-        Parallelized exploration of multiple games.
+        Implement multithreading to be able to solve several fields simultaneously.
 
+
+------------------------------------------------------------------------------------------------------------------------
 Fundamental Concepts and Algorithm Recall A* Algorithm
 
     Definition: A* combines the actual cost to reach a node (g(n)) with an estimated cost to the goal (h(n)).
