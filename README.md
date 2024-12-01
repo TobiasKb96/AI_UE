@@ -102,5 +102,7 @@
     Complexity Comparison:
         Manhattan is computationally more expensive but reduces total explored states.
 
+![img.png](Table_of_100_games_h1_h2.png)
+
     Alternatives and Improvements:
         Implement multithreading to be able to solve several fields simultaneously.
