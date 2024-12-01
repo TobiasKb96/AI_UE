@@ -3,18 +3,10 @@
 ##TODO table with complexity comparisons of different heuristics
 ##TODO comment code -> Julian
 ##TODO rework documentation ->Julian
-import concurrent
 import threading
 import time
-import concurrent.futures
 from collections import defaultdict
-
 from Classes.Game import Game
-
-
-
-
-
 
 ###############################
 
@@ -38,21 +30,30 @@ def solve_puzzle(instance_id, heuristic_method="h1"):
     nr_of_boards = game.get_number_of_Boards()
     solution_complexity = game.get_complexity_of_solution()
 
+    ## Free up memory
+    game.root_board = None
+    game.list_of_boards = None
+    game.solution_board = None
+    game.board_states = None
+
     return {
         "Runtime": total_runtime,
         "Number of Boards": nr_of_boards,
         "Complexity": solution_complexity
     }
 
-def start_games(nr_of_games, heuristic_method):
+def start_games(nr_of_games, heuristic_method, max_threads):
     results = []
     threads = []
-
     lock = threading.Lock()
+    semaphore = threading.Semaphore(max_threads)
     def solved_thread(instance_id, heuristic_method):
-        result = solve_puzzle(instance_id, heuristic_method)
-        with lock:                  #ensure only one thread writes to results at a time
-            results.append(result)
+        with semaphore:
+            print(f"starting thread {instance_id}")
+            result = solve_puzzle(instance_id, heuristic_method)
+            with lock:                  #ensure only one thread writes to results at a time
+                results.append(result)
+                print(f"finished thread {instance_id} with complexity {result['Complexity']}")
 
     ##Threading for each game
     for instance_id in range(1, nr_of_games + 1):
@@ -122,10 +123,13 @@ def print_results(result_h1, result_h2):
 
 
 ##Start games
-result_h1 = start_games(nr_of_games, "h1")
-result_h2 = start_games(nr_of_games, "h2")
+result_h1 = start_games(nr_of_games, "h1", 5)
+result_h2 = start_games(nr_of_games, "h2", 5)
+
 
 ##Analyze results
+
+
 average_h1 = analyze_results(result_h1)
 average_h2 = analyze_results(result_h2)
 
@@ -139,7 +143,6 @@ print(f"Total puzzles processed: {len(result_h1)} for H1, {len(result_h2)} for H
 ##print(average_h1, average_h2)
 
 
-##TODO split into different complexities
 
 
 

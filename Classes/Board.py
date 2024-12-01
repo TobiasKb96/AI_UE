@@ -59,28 +59,15 @@ class Board:
                     k += 1
 
     def is_solvable(self, sequence):
-        # Filter out the blank tile (0)
-        sequence_no_zero = [tile for tile in sequence if tile != 0]
-
         # Count inversions
         inversions = 0
-        for i in range(len(sequence_no_zero)):
-            for j in range(i + 1, len(sequence_no_zero)):
-                if sequence_no_zero[i] > sequence_no_zero[j]:
+        for i in range(len(sequence)):
+            for j in range(i + 1, len(sequence)):
+                if sequence[i] > sequence[j] and sequence[j] != 0:
                     inversions += 1
 
-        # Find the row of the blank tile (0) in the 2D representation
-        zero_index = sequence.index(0)  # Position of the blank tile in the 1D sequence
-        zero_row = zero_index // self.width  # Row of the blank tile in the 2D grid
-
-        # Calculate the blank tile's row from the bottom
-        blank_row_from_bottom = self.height - zero_row
-
-        # Determine solvability based on grid width
-        if self.width % 2 != 0:  # Odd-width grids
-            return inversions % 2 == 0
-        else:  # Even-width grids
-            return (inversions + blank_row_from_bottom) % 2 == 0
+        # A 3x3 puzzle is solvable if inversions are even
+        return inversions % 2 == 0
 
     def printBoard(self):
         for row in self.array:
@@ -96,16 +83,14 @@ class Board:
 
     ##Manhatten distance
     def h2(self):
-        distance = 0
         # Iterate through the board to calculate the distance for each tile
-        goal_value = 0
+        distance = 0
         for i in range(self.width):
             for j in range(self.height):
-
-                if self.array[i][j] != self.goal[i][j]:
-                    board_coordinates = np.argwhere(self.array == goal_value)[0]
-                    goal_value += 1
-                    distance += abs((board_coordinates[0]) - i) + abs((board_coordinates[1]) - j)
+                value = self.array[i][j]
+                if value != 0:  # Ignore the blank tile
+                    goal_position = np.argwhere(self.goal == value)[0]
+                    distance += abs(goal_position[0] - i) + abs(goal_position[1] - j)
         self.heuristic_estimate = distance
         #print(self.heuristic_estimate)
 
