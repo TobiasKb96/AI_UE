@@ -62,6 +62,9 @@ class Board:
                     self.array[i][j] = allNumbers[k]
                     k += 1
 
+    # Input: A list representing the random generated sequence
+    # Output: Boolean indicating whether the sequence is solvable
+    # Function: Calculates inversions and blank tile position to determine solvability
     def is_solvable(self, sequence):
         # Filter out the blank tile (0)
         sequence_no_zero = [tile for tile in sequence if tile != 0]
@@ -86,11 +89,13 @@ class Board:
         else:  # Even-width grids
             return (inversions + blank_row_from_bottom) % 2 == 0
 
+    # Function: Displays the board as a 2D Array
     def printBoard(self):
         for row in self.array:
             print(row)
 
-    ##Hamming heuristic
+    # Output: The newly calculated Hamming distance
+    # Function: Calculates the Hamming distance (Counts the number of misplaced tiles)
     def h1(self):
         differences = np.sum(self.array != self.goal)
         if differences > 0:
@@ -98,7 +103,8 @@ class Board:
         self.heuristic_estimate = differences
         print(self.heuristic_estimate)
 
-    ##Manhatten distance
+    # Output: The newly calculated Manhattan distance
+    # Function: Calculates the Manhattan distance (the sum of distances for all tiles from their goal positions)
     def h2(self):
         distance = 0
         # Iterate through the board to calculate the distance for each tile
@@ -113,6 +119,9 @@ class Board:
         self.heuristic_estimate = distance
         print(self.heuristic_estimate)
 
+    # Input: Tile which should be exchanged with the empty field
+    # Output: New board with moved tiles
+    # Function: Swaps the positions of 0 and x and increments the move cost
     def switch_x_and_0(self, x):
         pos1 = tuple(np.argwhere(self.array == 0)[0])  # Get position of 0
         pos2 = tuple(np.argwhere(self.array == x)[0])  # Get position of x
@@ -121,6 +130,8 @@ class Board:
         self.array[pos1], self.array[pos2] = self.array[pos2], self.array[pos1]
         self.cost += 1
 
+    # Output: List of tiles that can move into the blank space
+    # Function: Identifies valid moves by checking the position of the blank tile
     def possible_moves(self):
         zero_position = tuple(np.argwhere(self.array == 0)[0])
         row, col = zero_position
@@ -137,6 +148,8 @@ class Board:
 
         return neighbors
 
+    # Output: Overall costs
+    # Function: Adds cost and heuristic_estimate
     def update_cost(self):
         self.overall_cost = self.cost + self.heuristic_estimate
 

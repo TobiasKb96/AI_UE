@@ -1,11 +1,24 @@
-Modules
+# Documentation
 
+## Task Description
+
+    The task involves implementing an 8-puzzle solver using the A* search algorithm.
+    This is to be implemented with the help of the Hamming and Mannhattan heuristic.
+    These two approaches should then be compared on the basis of memory usage and computation time by using 100 ramdom searches each.
+    The project consists of three Modules: 
     Board.py: Defines the Board class for managing board states, heuristic calculations, and transitions.
     Game.py: Contains the Game class, which organizes A* search execution and maintains the solution path.
     UE1_main.py: Main script for initialization, execution, and result display.
 
-Classes
-Board (Board.py)
+
+
+## Software architecture diagram
+
+![Diagram_8_Puzzle.drawio.png](Diagram_8_Puzzle.drawio.png)
+
+## Classes
+
+### Board (Board.py)
 
     Represents a single board state.
 
@@ -28,23 +41,33 @@ Board (Board.py)
         possible_moves: Identifies tiles that can be swapped with the blank.
         update_cost: Updates the overall cost for the board state.
 
-Game (Game.py)
+### Game (Game.py)
 
     Manages the search process for a solution.
 
     Attributes:
         heuristic_method: Chosen heuristic ("h1" or "h2").
-        board_states: 
+        board_states: The closed set (Already processed boards/states).
         root_board: Starting board state.
         solution_board: Final solved board state.
-        list_of_boards: Open list of states for exploration.
+        list_of_boards: Open Set (list of boards/states for exploration).
 
-    Key Methods:
+    Methods:
         explore_child_boards: Expands child states from a parent.
         find_solution: Executes the A* search algorithm.
         print_shortest_path: Displays the path from the initial to the solved state.
 
-Fundamental Design Decisions
+## Data Structures
+
+    Board:
+        2D numpy array.
+        Attributes for tracking cost, parent, and children.
+    Game:
+        List of Board objects for managing states.
+        Set for tracking explored states.
+
+
+## Fundamental Design Decisions
 
     Data Structures: 
         numpy arrays for efficient board operations.
@@ -56,9 +79,21 @@ Fundamental Design Decisions
             Board is responsible for creating new boards based on the distances.
             Game is responsible for finding the solution and its flow.
 
+## Fundamental Concepts
+
+    Admissible Heuristics: Ensure that the heuristic never overestimates the cost to the goal.
+    Search Trees: Represent states and transitions as nodes and edges.
+    Priority Queues: Manage the open list efficiently.
+    A* Search: Combines the actual cost to reach a node (g(n)) with an estimated cost to the goal (h(n)).
+               f(n) = g(n) + h(n)
+    A* Search steps:
+        Initialize open and closed lists.
+        Expand the node with the smallest f(n).
+        Generate children, calculate their costs, and add unexplored states to the open list.
+        Repeat until the goal is reached or no states remain.
 
 
-Discussion and Conclusions
+## Discussion and Conclusions
 
     Experimental Observations:
         Manhattan heuristic performs better for deeper solutions due to finer granularity.
@@ -69,55 +104,3 @@ Discussion and Conclusions
 
     Alternatives and Improvements:
         Implement multithreading to be able to solve several fields simultaneously.
-
-
-------------------------------------------------------------------------------------------------------------------------
-Fundamental Concepts and Algorithm Recall A* Algorithm
-
-    Definition: A* combines the actual cost to reach a node (g(n)) with an estimated cost to the goal (h(n)).
-        f(n) = g(n) + h(n)
-
-    Steps:
-        Initialize open and closed lists.
-        Expand the node with the smallest f(n).
-        Generate children, calculate their costs, and add unexplored states to the open list.
-        Repeat until the goal is reached or no states remain.
-
-Fundamental Concepts
-
-    Admissible Heuristics: Ensure that the heuristic never overestimates the cost to the goal.
-    Search Trees: Represent states and transitions as nodes and edges.
-    Priority Queues: Manage the open list efficiently.
-
-Derived Data Structures, Methods, and Variables
-Data Structures
-
-    Board:
-        2D numpy array.
-        Attributes for tracking cost, parent, and children.
-    Game:
-        List of Board objects for managing states.
-        Set for tracking explored states.
-
-Methods
-
-    Board Initialization: Ensures solvability using inversion count.
-    Heuristic Functions:
-        h1: Counts misplaced tiles.
-        h2: Sums Manhattan distances.
-    State Exploration:
-        possible_moves: Generates valid moves for the blank tile.
-
-Design and Implementation
-
-    Design:
-        Modular structure separating game logic (Game) from state logic (Board).
-        Encapsulation of heuristics within the Board class.
-
-    Testing:
-        Unit tests for board initialization and heuristic calculations.
-        Performance tests for multiple random states.
-
-    Documentation:
-        Inline comments for methods and variables.
-        Detailed output for solution paths.

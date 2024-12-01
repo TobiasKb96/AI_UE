@@ -1,8 +1,6 @@
 ##TODO multithreaded 100 Games
 ##TODO console output ask for solved board
 ##TODO table with complexity comparisons of different heuristics
-##TODO comment code -> Julian
-##TODO rework documentation ->Julian
 
 from Classes.Game import Game
 
