@@ -38,10 +38,10 @@ def start_games(nr_of_games, heuristic_method, max_threads):
     results = []
     threads = []
     lock = threading.Lock()
-    semaphore = threading.Semaphore(max_threads)
+    semaphore = threading.Semaphore(max_threads) #sets maximum of parallel threads
     def solved_thread(instance_id, heuristic_method):
         with semaphore:
-            print(f"starting thread {instance_id}")
+            #print(f"starting thread {instance_id}")
             result = solve_puzzle(heuristic_method)
             with lock:                  #ensure only one thread writes to results at a time
                 results.append(result)

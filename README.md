@@ -1,5 +1,7 @@
 # Documentation
 
+# Participants: Julian Schmitt, Stefanie Biber, Anna Zierlinger, Tobias Kaltenbrunner
+
 ## Task Description
 
     The task involves implementing an 8-puzzle solver using the A* search algorithm.
@@ -115,3 +117,4 @@
         Implement multiprocessing to circumvent pythons memory limit.
         Make nodes more lightweight, exclude goal array for each board
         Solve H1 and H2 heuristic for the same boards not diffenrent ones
+        Applying learned Java structures and coding conventions to Python complicates things.
