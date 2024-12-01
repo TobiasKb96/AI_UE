@@ -11,7 +11,6 @@
     UE1_main.py: Main script for initialization, execution, and result display.
 
 
-
 ## Software architecture diagram
 
 ![Diagram_8_Puzzle.drawio.png](Diagram_8_Puzzle.drawio.png)
@@ -41,7 +40,7 @@
         possible_moves: Identifies tiles that can be swapped with the blank.
         update_cost: Updates the overall cost for the board state.
 
-### Game (Game.py)
+### Multi_Stats (Game.py)
 
     Manages the search process for a solution.
 
@@ -56,6 +55,13 @@
         explore_child_boards: Expands child states from a parent.
         find_solution: Executes the A* search algorithm.
         print_shortest_path: Displays the path from the initial to the solved state.
+
+### Performance (Performance.py)
+
+    Methods:
+        solve_puzzle: Solves a single puzzle using specified heuristic with performance tracking
+        start_games: Solves multiple puzzles in parallel using threading and limits the number of concurrent threads
+        analyze_results: Analyzes results by grouping them by complexity and calculating averages
 
 ## Data Structures
 
@@ -75,9 +81,10 @@
 
     Class Hierarchy:
         Logical division of functionalities into board, game and main.
-            Main is responsible for starting the solution search and for entering the basic conditions (which heuristics, how many fields should be created, ...).
+            Main is responsible for starting the solution search and for entering the basic conditions (which heuristics, how many games should be created, ...).
             Board is responsible for creating new boards based on the distances.
             Game is responsible for finding the solution and its flow.
+            Multi_stats is responsible for starting multiple games at once and tracking their performance
 
 ## Fundamental Concepts
 
@@ -105,4 +112,6 @@
 ![img.png](Table_of_100_games_h1_h2.png)
 
     Alternatives and Improvements:
-        Implement multithreading to be able to solve several fields simultaneously.
+        Implement multiprocessing to circumvent pythons memory limit.
+        Make nodes more lightweight, exclude goal array for each board
+        Solve H1 and H2 heuristic for the same boards not diffenrent ones

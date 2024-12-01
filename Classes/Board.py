@@ -103,7 +103,7 @@ class Board:
         self.heuristic_estimate = distance
         #print(self.heuristic_estimate)
 
-    # Input: Tile which should be exchanged with the empty field
+    # Input: Tile number which should be exchanged with the empty field
     # Output: New board with moved tiles
     # Function: Swaps the positions of 0 and x and increments the move cost
     def switch_x_and_0(self, x):
